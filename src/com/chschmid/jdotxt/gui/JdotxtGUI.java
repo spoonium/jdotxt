@@ -201,7 +201,9 @@ public class JdotxtGUI extends JFrame {
 	            		if (result == 0) Jdotxt.storeTodos();
             		}
             	}
-            	
+
+
+                int exitCode = (int) taskBag.getTasks().stream().filter(t->!t.isCompleted()).count();
             	if (result < 2){
             		Jdotxt.userPrefs.putInt("x", JdotxtGUI.this.getX());
                 	Jdotxt.userPrefs.putInt("y", JdotxtGUI.this.getY());
@@ -210,7 +212,7 @@ public class JdotxtGUI extends JFrame {
                 	Jdotxt.userPrefs.putBoolean("isMaximized", (JdotxtGUI.this.getExtendedState() & JFrame.MAXIMIZED_BOTH) != 0);
                 	Jdotxt.userPrefs.putBoolean("firstRun", false);
                 	Jdotxt.userPrefs.put("version", Jdotxt.VERSION);
-                    System.exit(0);
+                    System.exit(exitCode);
             	}
             }
         });
