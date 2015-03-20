@@ -137,7 +137,7 @@ public class JdotxtGUI extends JFrame {
 		toolbar.getButtonReload().addActionListener(new ActionListener() { public void actionPerformed(ActionEvent arg0) { reloadTasks(); } });
 		toolbar.getButtonArchive().addActionListener(new ActionListener() { public void actionPerformed(ActionEvent arg0) { archiveTasks(); } });
 		toolbar.getButtonSettings().addActionListener(new ActionListener() { public void actionPerformed(ActionEvent arg0) { showSettingsDialog(); } });
-		//toolbar.setVisibleSaveReload(!Jdotxt.userPrefs.getBoolean("autosave", false));
+
 		
 		// Other GUI element listeners
 		// What to do when the filters change
@@ -154,7 +154,7 @@ public class JdotxtGUI extends JFrame {
 			}
 		});
 		autoSaveListener = new AutoSaveListener();
-		if (Jdotxt.userPrefs.getBoolean("autosave", false)) taskList.addTaskListener(autoSaveListener);
+		if (Jdotxt.settings.autosave()) taskList.addTaskListener(autoSaveListener);
 		
 		// Style taskPane
 		tasksPane.setBorder(BorderFactory.createEmptyBorder());
@@ -195,7 +195,7 @@ public class JdotxtGUI extends JFrame {
             public void windowClosing(WindowEvent e) {
             	int result = 1;
             	if (taskBag.hasChanged()) {
-            		if (Jdotxt.userPrefs.getBoolean("autosave", false)) Jdotxt.storeTodos();
+            		if (Jdotxt.settings.autosave()) Jdotxt.storeTodos();
             		else {
 	            		result = JOptionPane.showOptionDialog(JdotxtGUI.this, lang.getWord("Text_save_changes"), lang.getWord("jdotxt"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
 	            		if (result == 0) Jdotxt.storeTodos();
@@ -256,7 +256,7 @@ public class JdotxtGUI extends JFrame {
 		else {
 			taskBag.update(null); // Fake a change so that a save really leads to a save
 			toolbar.getButtonSave().setEnabled(true);
-			if (Jdotxt.userPrefs.getBoolean("autosave", false)) {
+			if (Jdotxt.settings.autosave()) {
 				saveTasks(true);
 				System.out.println("Save update");
 			}
@@ -325,18 +325,18 @@ public class JdotxtGUI extends JFrame {
 		JdotxtPreferencesDialog settingsDialog = new JdotxtPreferencesDialog();
 		
 		// Backup settings before the dialog is shown
-		String currentPath = Jdotxt.userPrefs.get("dataDir", Jdotxt.DEFAULT_DIR);
+		String currentPath = Jdotxt.settings.dataDir();
 		boolean currentCompactMode = Jdotxt.userPrefs.getBoolean("compactMode", false);
-		boolean currentAutoSave = Jdotxt.userPrefs.getBoolean("autosave", false);
+		boolean currentAutoSave = Jdotxt.settings.autosave();
 		
 		settingsDialog.setVisible(true);
 		
 		// Settings after the dialog was closed
-		String newPath = Jdotxt.userPrefs.get("dataDir", Jdotxt.DEFAULT_DIR);
+		String newPath = Jdotxt.settings.dataDir();
 		boolean newCompactMode = Jdotxt.userPrefs.getBoolean("compactMode", false);
 		boolean prependMetadata = Jdotxt.userPrefs.getBoolean("prependMetadata", false);
 		boolean copyMetadata = Jdotxt.userPrefs.getBoolean("copyMetadata", false);
-		boolean autoSave = Jdotxt.userPrefs.getBoolean("autosave", false);
+		boolean autoSave = Jdotxt.settings.autosave();
 		// Update stuff, according to the new settings
 		taskList.setPrependMetadata(prependMetadata);
 		taskList.setCopyProjectsContexts2NewTask(copyMetadata);
@@ -351,7 +351,6 @@ public class JdotxtGUI extends JFrame {
 				taskList.addTaskListener(autoSaveListener);
 			}
 		}
-		//toolbar.setVisibleSaveReload(!Jdotxt.userPrefs.getBoolean("autosave", false));
 	}
 	
     // Let the GUI elements know of newly loaded tasks

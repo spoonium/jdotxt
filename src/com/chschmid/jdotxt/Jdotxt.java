@@ -22,6 +22,7 @@ package com.chschmid.jdotxt;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.prefs.Preferences;
 
 import com.chschmid.jdotxt.gui.JdotxtGUI;
@@ -44,8 +45,8 @@ public class Jdotxt {
 	
 	public static TaskBag taskBag;
 	public static Preferences userPrefs;
+	public static UserSettings settings;
 
-	public static final String DEFAULT_DIR = System.getProperty("user.home") + File.separator + "jdotxt";
 	
 	private static FileModifiedWatcher fileModifiedWatcher;
 	
@@ -72,17 +73,20 @@ public class Jdotxt {
 		
 		// Mac OS X fixes
 		if (isMacOSX()) onMacOSX();
-		
+        boolean showFirstRunDialog = !Arrays.asList(args).contains("--skip-first-run-dialog");
 		// Start GUI
 		Runnable viewGUI = new Runnable() {
 			@Override
 			public void run() {
 				// Show settings on first run
-				if (userPrefs.getBoolean("firstRun", true)) {
+				if (userPrefs.getBoolean("firstRun", showFirstRunDialog)) {
 					JdotxtWelcomeDialog welcomeDialog = new JdotxtWelcomeDialog();
 					welcomeDialog.setVisible(true);
 				}
-				
+
+                SpoonOnlineTodo.downloadAndStoreTodo(
+                        new File(settings.dataDir(),"todo.txt"),
+                        Arrays.asList(args));
 				// Main window
 				JdotxtGUI mainGUI = new JdotxtGUI();
 				//JdotxtGUItest mainGUI = new JdotxtGUItest();
@@ -92,10 +96,13 @@ public class Jdotxt {
 		EventQueue.invokeLater(viewGUI);
 	}
 	
-	public static void loadPreferences() { userPrefs = Preferences.userNodeForPackage(Jdotxt.class); }
+	public static void loadPreferences() {
+        userPrefs = Preferences.userNodeForPackage(Jdotxt.class);
+        settings = new UserSettings(userPrefs);
+    }
 	
 	public static void loadTodos() {
-		String dataDir  = userPrefs.get("dataDir", DEFAULT_DIR);
+		String dataDir  = settings.dataDir();
 		String todoFile = dataDir + File.separator + "todo.txt";
 		String doneFile = dataDir + File.separator + "done.txt";
 		

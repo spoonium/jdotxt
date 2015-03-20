@@ -38,7 +38,7 @@ import com.todotxt.todotxttouch.util.Util;
  * @author Tim Barlotta
  */
 public class LocalFileTaskRepository implements LocalTaskRepository {
-	final static String DEFAULTDIR = Jdotxt.DEFAULT_DIR;
+	final static String DEFAULTDIR = Jdotxt.settings.dataDir();
 	public static File TODO_TXT_FILE = new File(DEFAULTDIR + File.separator + "todo.txt");
 	public static File DONE_TXT_FILE = new File(DEFAULTDIR + File.separator + "done.txt");
 

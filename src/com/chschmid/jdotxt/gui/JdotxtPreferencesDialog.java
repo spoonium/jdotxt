@@ -562,26 +562,26 @@ public class JdotxtPreferencesDialog extends JDialog {
 	}
 
 	private void saveSettings() {
-		Jdotxt.userPrefs.put("dataDir", directory.getText());
+        Jdotxt.settings.dataDir(directory.getText());
 		Jdotxt.userPrefs.putBoolean("compactMode", cbCompactMode.isSelected());
 		Jdotxt.userPrefs.putBoolean("copyMetadata", cbCopyMetadata.isSelected());
 		Jdotxt.userPrefs.putBoolean("prependMetadata", cbPrependMetadata.isSelected());
 		Jdotxt.userPrefs.putBoolean("showProjectsPanel", cbProjectsPanel.isSelected());
 		Jdotxt.userPrefs.putBoolean("showContextsPanel", cbContextsPanel.isSelected());
 		Jdotxt.userPrefs.putBoolean("switchPanels", cbSwitchPanels.isSelected());
-		Jdotxt.userPrefs.putBoolean("autosave", cbAutosave.isSelected());
+		Jdotxt.settings.autosave(cbAutosave.isSelected());
 	}
 
 	private void loadSettings() {
-		directory.setText(Jdotxt.userPrefs.get("dataDir", Jdotxt.DEFAULT_DIR));
+        directory.setText(Jdotxt.settings.dataDir());
 		cbCompactMode.setSelected(Jdotxt.userPrefs.getBoolean("compactMode", false));
 		cbCopyMetadata.setSelected(Jdotxt.userPrefs.getBoolean("copyMetadata", false));
 		cbPrependMetadata.setSelected(Jdotxt.userPrefs.getBoolean("prependMetadata", false));
 		cbProjectsPanel.setSelected(Jdotxt.userPrefs.getBoolean("showProjectsPanel", true));
 		cbContextsPanel.setSelected(Jdotxt.userPrefs.getBoolean("showContextsPanel", true));
 		cbSwitchPanels.setSelected(Jdotxt.userPrefs.getBoolean("switchPanels", false));
-		cbAutosave.setSelected(Jdotxt.userPrefs.getBoolean("autosave", false));
-		setEnableAutoSaveOptions(Jdotxt.userPrefs.getBoolean("autosave", false));
+		cbAutosave.setSelected(Jdotxt.settings.autosave());
+		setEnableAutoSaveOptions(Jdotxt.settings.autosave());
 	}
 
 	private void styleJdotxtImageButton(JdotxtImageButton button, String toolTipText) {

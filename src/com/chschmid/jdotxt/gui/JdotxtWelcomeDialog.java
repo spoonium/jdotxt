@@ -97,7 +97,7 @@ public class JdotxtWelcomeDialog extends JDialog{
 		directory.setMaximumSize(directory.getPreferredSize());
 		
 		directory.setEnabled(false);
-		directory.setText(Jdotxt.userPrefs.get("dataDir", Jdotxt.DEFAULT_DIR));
+		directory.setText(Jdotxt.settings.dataDir());
 		directory.setAlignmentX(LEFT_ALIGNMENT);
 		
 		JButton btnChooseDir = new JButton(JdotxtGUI.lang.getWord("Choose_directory"));
@@ -145,7 +145,7 @@ public class JdotxtWelcomeDialog extends JDialog{
 		start.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Jdotxt.userPrefs.put("dataDir", directory.getText());
+				Jdotxt.settings.dataDir(directory.getText());
 				JdotxtWelcomeDialog.this.dispose();
 			}
 		});
