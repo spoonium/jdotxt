@@ -12,9 +12,10 @@ public final class SpoonOnlineTodo {
 
     public static void downloadAndStoreTodo(File location,Collection<String> args){
         Optional<String> todoTxt = downloadTodo(args);
+        location.getParentFile().mkdirs();
         if(todoTxt.isPresent()){
             try {
-                Files.write(location.toPath(),todoTxt.get().getBytes("UTF-8"), StandardOpenOption.TRUNCATE_EXISTING);
+                Files.write(location.toPath(),todoTxt.get().getBytes("UTF-8"), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
             } catch (IOException e) {
                 throw new TodoFileDownloadFailed(e.getMessage(),e);
             }

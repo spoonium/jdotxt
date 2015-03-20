@@ -73,7 +73,7 @@ public class Jdotxt {
 		
 		// Mac OS X fixes
 		if (isMacOSX()) onMacOSX();
-        boolean showFirstRunDialog = !Arrays.asList(args).contains("--skip-first-run-dialog");
+        boolean showFirstRunDialog = !Arrays.asList(args).contains("--skip-first-run");
 		// Start GUI
 		Runnable viewGUI = new Runnable() {
 			@Override
