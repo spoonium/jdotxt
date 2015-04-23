@@ -34,7 +34,7 @@ public final class SpoonOnlineTodo {
 
     static private String valueOfArgument(String argument){
         int split = argument.indexOf('=');
-        return argument.substring(split+1);
+        return argument.substring(split + 1);
     }
 
 
@@ -47,9 +47,7 @@ public final class SpoonOnlineTodo {
     }
     static public String download(URI target, String authToken) {
         try {
-            URL url = target.toURL();
-            URLConnection connection = url.openConnection();
-            connection.setRequestProperty("X-Spoon-Ticket",authToken);
+            HttpURLConnection connection = connectFollowRedirects(target, authToken);
             StringBuilder buffer = new StringBuilder();
             try(InputStream read = connection.getInputStream()){
 
@@ -66,6 +64,28 @@ public final class SpoonOnlineTodo {
         }
     }
 
+
+    private static HttpURLConnection connectFollowRedirects(URI target, String authToken) throws IOException {
+        int maxAttempts = 3;
+        URL url = target.toURL();
+        for(int i=0;i<maxAttempts;i++){
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestProperty("X-Spoon-Ticket", authToken);
+            connection.setInstanceFollowRedirects(true);
+
+            switch (connection.getResponseCode())
+            {
+                case HttpURLConnection.HTTP_MOVED_PERM:
+                case HttpURLConnection.HTTP_MOVED_TEMP:
+                    String location = connection.getHeaderField("Location");
+                    URL absolutizeNext     = new URL(url, location);  // Deal with relative URLs
+                    url = absolutizeNext;
+                    continue;
+            }
+            return connection;
+        }
+        throw new IOException("To many redirects. Redirected: "+maxAttempts+" times");
+    }
 
     static class TodoFileDownloadFailed extends RuntimeException{
         public TodoFileDownloadFailed(String message, Throwable cause) {
