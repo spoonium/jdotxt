@@ -6,6 +6,8 @@ import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+// YES, yes...bite me...better api suggestion are welcome
 import sun.security.tools.keytool.CertAndKeyGen;
 import sun.security.x509.X500Name;
 

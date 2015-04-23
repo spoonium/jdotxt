@@ -49,6 +49,7 @@
         <fileset refid="main.libs"/>
         <fileset refid="test.libs"/>
       </classpath>
+      <compilerarg value="-XDignore.symbol.file" />
     </javac>
   </target>
 
